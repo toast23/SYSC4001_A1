@@ -1,0 +1,23 @@
+0, 50, CPU execution
+50, 1, switch to kernel mode
+51, 10, context saved
+61, 1, find vector 7 in memory position 0x000E
+62, 1, load address 0X00BD into the PC
+63, 1, IRET
+64, 1, switch to kernel mode
+65, 10, context saved
+75, 1, find vector 7 in memory position 0x000E
+76, 1, load address 0X00BD into the PC
+77, 1, IRET
+78, 100, CPU execution
+178, 1, switch to kernel mode
+179, 10, context saved
+189, 1, find vector 12 in memory position 0x0018
+190, 1, load address 0X03B9 into the PC
+191, 1, IRET
+192, 1, switch to kernel mode
+193, 10, context saved
+203, 1, find vector 12 in memory position 0x0018
+204, 1, load address 0X03B9 into the PC
+205, 1, IRET
+206, 20, CPU execution
