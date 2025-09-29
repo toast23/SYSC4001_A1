@@ -34,14 +34,15 @@ int main(int argc, char** argv) {
             execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", CPU execution\n";
             current_time += duration_intr;
         }
+        else if (activity == "END_IO") {
+            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n";
+            current_time++;
+
+        }
         else { 
             auto [intr_log, updated_time] = intr_boilerplate(current_time, duration_intr, context_save_time, vectors);
             execution += intr_log;
             current_time = updated_time;
-
-            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n";
-            current_time++;
-
         }
 
         /************************************************************************/
