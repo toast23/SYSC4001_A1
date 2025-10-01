@@ -8,6 +8,7 @@
 
 #include "interrupts.hpp"
 
+
 int main(int argc, char** argv) {
 
     //vectors is a C++ std::vector of strings that contain the address of the ISR
@@ -21,7 +22,6 @@ int main(int argc, char** argv) {
     /******************ADD YOUR VARIABLES HERE*************************/
     int current_time = 0;
     int context_save_time = 10;
-    int cpu_end_time = 0;
 
     /******************************************************************/
 
@@ -37,7 +37,8 @@ int main(int argc, char** argv) {
         else if (activity == "END_IO") {
             execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n";
             current_time++;
-
+            execution += std::to_string(current_time) + ", " + std::to_string(170) + ", end of I/O " + std::to_string(duration_intr) + ": interrupt\n";
+            current_time += 170;
         }
         else { 
             auto [intr_log, updated_time] = intr_boilerplate(current_time, duration_intr, context_save_time, vectors);
