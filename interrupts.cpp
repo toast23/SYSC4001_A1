@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
 
             auto [new_execution, updated_time] = intr_boilerplate(current_time, duration_intr, context_save_time, vectors);
             execution += new_execution;
-            current_time = updated_time; 
+            current_time = updated_time;  
 
             int device_number_delay_time = delays.at(duration_intr);
             execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", END_IO: run the ISR\n"; 
@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
             current_time++; 
         }
         else { 
-             std::cerr << "error is happened here so nothing to do unless OS let u to do work" << std::endl; 
+             std::cerr << "error is happened here so nothing to do unless OS let u do work" << std::endl; 
         }
 
         /************************************************************************/
