@@ -3,7 +3,7 @@
  * @file interrupts.cpp
  * @author Sasisekhar Govind
  * @author Tony Yao
- *
+ * @author Wenxuan Han 101256669 
  */
 
 #include "interrupts.hpp"
@@ -34,16 +34,35 @@ int main(int argc, char** argv) {
             execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", CPU execution\n";
             current_time += duration_intr;
         }
+        else if (activity == "SYSCALL")
+        {
+            auto [new_execution, updated_time] = intr_boilerplate(current_time, duration_intr, context_save_time, vectors);
+            execution += new_execution; 
+            current_time = updated_time;
+        
+            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", SYSCALL: run the ISR\n"; 
+            current_time += delays.at(duration_intr); 
+            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
+            current_time ++; 
+        }
         else if (activity == "END_IO") {
-            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n";
-            current_time++;
-            execution += std::to_string(current_time) + ", " + std::to_string(170) + ", end of I/O " + std::to_string(duration_intr) + ": interrupt\n";
-            current_time += 170;
+            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", Check priority of interrput\n";
+            current_time++; 
+            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", check if masked\n";
+            current_time++; 
+
+            auto [new_execution, updated_time] = intr_boilerplate(current_time, duration_intr, context_save_time, vectors);
+            execution += new_execution;
+            current_time = updated_time; 
+
+            int device_number_delay_time = delays.at(duration_intr);
+            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", END_IO: run the ISR\n"; 
+            current_time += device_number_delay_time; 
+            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
+            current_time ++; 
         }
         else { 
-            auto [intr_log, updated_time] = intr_boilerplate(current_time, duration_intr, context_save_time, vectors);
-            execution += intr_log;
-            current_time = updated_time;
+             std::cerr << "error is happened here so nothing to do unless OS let u to do work" << std::endl; 
         }
 
         /************************************************************************/
