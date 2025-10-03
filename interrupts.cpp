@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
             {
                 continue;
             }
-            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", SYSCALL: run the ISR\n"; 
+            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", SYSCALL: run the ISR (device driver)\n"; 
             current_time += delays.at(duration_intr); 
             execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
             current_time++; 
@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
             }
 
             int device_number_delay_time = delays.at(duration_intr); 
-            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", END_IO: run the ISR\n"; 
+            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", END_IO: run the ISR (device driver)\n"; 
             current_time += device_number_delay_time; 
             execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
             current_time++; 
