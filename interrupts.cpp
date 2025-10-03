@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
             execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", SYSCALL: run the ISR\n"; 
             current_time += delays.at(duration_intr); 
             execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
-            current_time ++; 
+            current_time++; 
         }
         else if (activity == "END_IO") {
             execution += std::to_string(current_time) + ", " + std::to_string(1) + ", Check priority of interrput\n";
@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
             execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", END_IO: run the ISR\n"; 
             current_time += device_number_delay_time; 
             execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
-            current_time ++; 
+            current_time++; 
             
         }
         else { 
