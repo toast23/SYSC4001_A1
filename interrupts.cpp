@@ -30,6 +30,10 @@ int main(int argc, char** argv) {
         auto [activity, duration_intr] = parse_trace(trace);
 
         /******************ADD YOUR SIMULATION CODE HERE*************************/
+        if (activity == ""){
+            continue;
+        }
+
         if (activity == "CPU") {
             execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", CPU execution\n";
             current_time += duration_intr;
@@ -40,10 +44,14 @@ int main(int argc, char** argv) {
             execution += new_execution; 
             current_time = updated_time;
         
+            if (duration_intr < 0 || duration_intr >= delays.size())
+            {
+                continue;
+            }
             execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", SYSCALL: run the ISR\n"; 
             current_time += delays.at(duration_intr); 
             execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
-            current_time++; 
+            current_time ++; 
         }
         else if (activity == "END_IO") {
             execution += std::to_string(current_time) + ", " + std::to_string(1) + ", Check priority of interrput\n";
@@ -53,16 +61,22 @@ int main(int argc, char** argv) {
 
             auto [new_execution, updated_time] = intr_boilerplate(current_time, duration_intr, context_save_time, vectors);
             execution += new_execution;
-            current_time = updated_time;  
+            current_time = updated_time; 
 
-            int device_number_delay_time = delays.at(duration_intr);
+            if (duration_intr < 0 || duration_intr >= delays.size())
+            {
+                continue;
+            }
+
+            int device_number_delay_time = delays.at(duration_intr); 
             execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", END_IO: run the ISR\n"; 
             current_time += device_number_delay_time; 
             execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
-            current_time++; 
+            current_time ++; 
+            
         }
         else { 
-             std::cerr << "error is happened here so nothing to do unless OS let u do work" << std::endl; 
+             std::cerr << "error is happened here so nothing to do unless OS let u to do work" << std::endl; 
         }
 
         /************************************************************************/
