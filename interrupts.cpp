@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     /******************ADD YOUR VARIABLES HERE*************************/
     int current_time = 0;
     int context_save_time = 10;
-
+    int each_activity_within_ISR = 40; 
     /******************************************************************/
 
     //parse each line of the input trace file
@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
         }
 
         if (activity == "CPU") {
-            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", CPU execution\n";
+            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", CPU Burst\n";
             current_time += duration_intr;
         }
         else if (activity == "SYSCALL")
@@ -43,21 +43,28 @@ int main(int argc, char** argv) {
             auto [new_execution, updated_time] = intr_boilerplate(current_time, duration_intr, context_save_time, vectors);
             execution += new_execution; 
             current_time = updated_time;
-        
+
             if (duration_intr < 0 || duration_intr >= delays.size())
             {
                 continue;
-            }
-            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", SYSCALL: run the ISR (device driver)\n"; 
-            current_time += delays.at(duration_intr); 
-            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
-            current_time++; 
+            } 
+            
+            int amount_activity_ISR = 0; 
+            execution += std::to_string(current_time) + ", " + std::to_string(each_activity_within_ISR) + ", SYSCALL: run the ISR (device driver)\n"; 
+            current_time += each_activity_within_ISR; 
+            amount_activity_ISR++; 
+
+            execution += std::to_string(current_time) + ", " + std::to_string(each_activity_within_ISR) + ", transfer data from device to memory\n"; 
+            current_time += each_activity_within_ISR; 
+            amount_activity_ISR++; 
+
+            int remain_activity_time_within_ISR; 
+            remain_activity_time_within_ISR = delays.at(duration_intr) - (amount_activity_ISR * each_activity_within_ISR); 
+            execution += std::to_string(current_time) + ", " + std::to_string(remain_activity_time_within_ISR) + ", check for errors\n"; 
+            current_time += remain_activity_time_within_ISR;
+
         }
         else if (activity == "END_IO") {
-            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", Check priority of interrput\n";
-            current_time++; 
-            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", check if masked\n";
-            current_time++; 
 
             auto [new_execution, updated_time] = intr_boilerplate(current_time, duration_intr, context_save_time, vectors);
             execution += new_execution;
@@ -68,16 +75,22 @@ int main(int argc, char** argv) {
                 continue;
             }
 
+            int amount_activity = 0; 
+
+            execution += std::to_string(current_time) + ", " + std::to_string(each_activity_within_ISR) + ", END_IO: run the ISR(device driver)\n"; 
+            current_time += each_activity_within_ISR; 
+            amount_activity++;
+
             int device_number_delay_time = delays.at(duration_intr); 
-            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr) + ", END_IO: run the ISR (device driver)\n"; 
-            current_time += device_number_delay_time; 
-            execution += std::to_string(current_time) + ", " + std::to_string(1) + ", IRET\n"; 
-            current_time++; 
+            int remain_time_within_ISR = device_number_delay_time - (amount_activity * each_activity_within_ISR);
+            execution += std::to_string(current_time) + ", " + std::to_string(remain_time_within_ISR) + ", check device status\n"; 
+            current_time += remain_time_within_ISR; 
             
         }
         else { 
              std::cerr << "error is happened here so nothing to do unless OS let u to do work" << std::endl; 
         }
+
 
         /************************************************************************/
 
