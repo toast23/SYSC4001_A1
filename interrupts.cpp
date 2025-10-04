@@ -60,6 +60,12 @@ int main(int argc, char** argv) {
 
             int remain_activity_time_within_ISR; 
             remain_activity_time_within_ISR = delays.at(duration_intr) - (amount_activity_ISR * each_activity_within_ISR); 
+
+            if (remain_activity_time_within_ISR < 0)
+            {
+                continue;
+            }
+            
             execution += std::to_string(current_time) + ", " + std::to_string(remain_activity_time_within_ISR) + ", check for errors\n"; 
             current_time += remain_activity_time_within_ISR;
 
@@ -83,6 +89,12 @@ int main(int argc, char** argv) {
 
             int device_number_delay_time = delays.at(duration_intr); 
             int remain_time_within_ISR = device_number_delay_time - (amount_activity * each_activity_within_ISR);
+
+            if (remain_activity_time_within_ISR < 0)
+            {
+                continue;
+            }
+            
             execution += std::to_string(current_time) + ", " + std::to_string(remain_time_within_ISR) + ", check device status\n"; 
             current_time += remain_time_within_ISR; 
             
