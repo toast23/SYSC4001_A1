@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     int current_time = 0;
     int context_save_time = 10;
     int cpu_end_time = 0;
-    int each_activity_within_ISR = 110;
+    int each_activity_within_ISR = 40;
     /******************************************************************/
 
     // parse each line of the input trace file
